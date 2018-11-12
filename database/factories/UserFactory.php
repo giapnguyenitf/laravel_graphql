@@ -22,6 +22,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'remember_token' => str_random(10),
         'address' => $faker->address,
         'phone' => $faker->phoneNumber,
-        'avatar' => $faker->imageUrl()
+        'avatar' => $faker->imageUrl(),
+        'role' => $faker->randomElement(['user', 'admin']),
     ];
 });

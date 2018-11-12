@@ -42,7 +42,7 @@ return [
     */
     'route' => [
         'prefix' => '',
-        // 'middleware' => ['loghttp']
+        'middleware' => ['jwt.auth']
     ],
 
     /*
