@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->attributes['role'] === self::ROLE_USER;
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

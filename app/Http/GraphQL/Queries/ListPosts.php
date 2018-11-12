@@ -6,7 +6,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Post;
 
-class GetPosts
+class ListPosts
 {
     /**
      * Return a value for the field.

@@ -5,40 +5,10 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query {
-    users: [User!]! @paginate(type: "paginator" model: "App\\User")
-    user(id: ID @eq): User @find(model: "App\\User")
-}
-
-type Mutation {
-    createUser(
-        name: String @rules(apply: ["required"])
-        email: String @rules(apply: ["required", "email", "unique:users,email"])
-        password: String @rules(apply: ["required", "min:6", "max:20"])
-    ): User @create(model: "App\\User")
-    updateUser(
-        id: ID @rules(apply: ["required"])
-        name: String
-        email: String @rules(apply: ["email"])
-    ): User @update(model: "App\\User")
-    deleteUser(
-        id: ID @rules(apply: ["required"])
-    ): User @delete(model: "App\\User")
-}
-
-type User {
-    id: ID!
-    name: String!
-    email: String!
-    date_of_birth: Date!
-    address: String!
-    role: Role!
-}
-
-# Post
-
-type Query {
-    getPost(id: ID): Post
-    getPosts(title: String, created_at: Date): [Post!]
+    findPost(id: ID!): Post
+    listPosts(title: String, created_at: Date): [Post!]
+    findUser(id: ID!): User
+    listUsers: [User!]! @paginate(model: "App\\User")
 }
 
 type Mutation {
@@ -50,6 +20,18 @@ type Mutation {
     ):Post
 }
 
+# User
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    date_of_birth: Date!
+    address: String!
+    role: Role!
+    posts: [Post!] @hasMany(relation: posts)
+}
+
+# Post
 type Post {
     id: ID!
     title: String!
@@ -61,7 +43,6 @@ type Post {
 }
 
 # Comment
-
 type Comment {
     id: ID!
     user: User! @belongsTo(relation: user)
@@ -70,6 +51,6 @@ type Comment {
 }
 
 enum Role{
-    ADMIN @enum(value: "admin")
-    USER @enum(value: "user")
+    admin @enum(value: "admin")
+    user @enum(value: "user")
 }
