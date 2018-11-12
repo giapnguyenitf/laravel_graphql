@@ -13,6 +13,7 @@ type Mutation {
     createUser(
         name: String @rules(apply: ["required"])
         email: String @rules(apply: ["required", "email", "unique:users,email"])
+        password: String @rules(apply: ["required", "min:6", "max:20"])
     ): User @create(model: "App\\User")
     updateUser(
         id: ID @rules(apply: ["required"])
@@ -30,6 +31,45 @@ type User {
     email: String!
     date_of_birth: Date!
     address: String!
-    created_at: DateTime!
-    updated_at: DateTime!
+    role: Role!
+}
+
+# Post
+
+type Query {
+    getPost(id: ID): Post
+    getPosts(title: String, created_at: Date): [Post!]
+}
+
+type Mutation {
+    createPost(
+        title: String @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["required", "max:500"])
+        content: String @rules(apply: ["required", "max:1000"])
+        user_id: Int @rules(apply: ["required","exists:users,id"])
+    ):Post
+}
+
+type Post {
+    id: ID!
+    title: String!
+    description: String!
+    content: String!
+    views: Int!
+    author: User @belongsTo(relation: user),
+    comments: [Comment!] @hasMany(relation: comments)
+}
+
+# Comment
+
+type Comment {
+    id: ID!
+    user: User! @belongsTo(relation: user)
+    content: String!
+    created_at: String!
+}
+
+enum Role{
+    ADMIN @enum(value: "admin")
+    USER @enum(value: "user")
 }
