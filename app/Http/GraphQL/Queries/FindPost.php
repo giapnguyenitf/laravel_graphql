@@ -6,7 +6,7 @@ use App\Post;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class GetPost
+class FindPost
 {
     /**
      * Return a value for the field.
