@@ -42,7 +42,7 @@ return [
     */
     'route' => [
         'prefix' => '',
-        'middleware' => ['jwt.auth']
+        'middleware' => []
     ],
 
     /*

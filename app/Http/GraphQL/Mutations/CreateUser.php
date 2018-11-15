@@ -4,6 +4,7 @@ namespace App\Http\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use App\User;
 
 class CreateUser
 {
@@ -19,6 +20,6 @@ class CreateUser
      */
     public function resolve($rootValue, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo)
     {
-        
+        return User::create($args);
     }
 }

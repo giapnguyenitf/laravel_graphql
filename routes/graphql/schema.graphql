@@ -4,14 +4,26 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "A date string with format 'Y-m-d', e.g. '2011-05-23'."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
+"A email format "
+scalar Email @scalar(class: "App\\Http\\GraphQL\\Scalars\\Email")
+
 type Query {
     findPost(id: ID!): Post
     listPosts(title: String, created_at: Date): [Post!]
+}
+
+extend type Query {
     findUser(id: ID!): User
     listUsers: [User!]! @paginate(model: "App\\User")
 }
 
 type Mutation {
+    createUser(
+        name: String! @rules(apply: ["required", "max:20"])
+        email: String! @rules(apply: ["required", "email"])
+        password: String! @rules(apply: ["required"])
+    ):User
+
     createPost(
         title: String @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["required", "max:500"])
@@ -32,8 +44,8 @@ type User {
 }
 
 # Post
-type Post {
-    id: ID!
+type Post implements Profile {
+    id: ID!@middleware(checks: ["jwt.auth"])
     title: String!
     description: String!
     content: String!
@@ -53,4 +65,14 @@ type Comment {
 enum Role{
     admin @enum(value: "admin")
     user @enum(value: "user")
+}
+
+interface Profile {
+    id: ID!
+}
+
+input CreateUserInput {
+    name: String!
+    email: String!
+    password: String!
 }
